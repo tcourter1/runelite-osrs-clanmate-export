@@ -10,23 +10,37 @@ repositories {
 	mavenCentral()
 }
 
-def runeLiteVersion = '1.8.21'
+def runeLiteVersion = '1.12.28'
 
 dependencies {
-	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
+	compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
 
-	compileOnly 'org.projectlombok:lombok:1.18.4'
-	annotationProcessor 'org.projectlombok:lombok:1.18.4'
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
-	testImplementation 'junit:junit:4.12'
-	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
-	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
+	testImplementation 'junit:junit:4.13.2'
+	testImplementation group: 'net.runelite', name: 'client', version: runeLiteVersion
+	testImplementation group: 'net.runelite', name: 'jshell', version: runeLiteVersion
 }
 
 group = 'com.clanmate_export'
 version = '1.0-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
+}
+
+task run(type: JavaExec) {
+	group = 'application'
+	description = 'Runs RuneLite with the Clanmate Export plugin loaded.'
+
+	dependsOn testClasses
+
+	main = 'com.clanmate_export.ClanMateExportTest'
+	classpath = sourceSets.test.runtimeClasspath
+
+	jvmArgs = ['-ea']
+	workingDir = project.projectDir
 }
